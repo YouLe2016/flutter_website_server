@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
+
+import 'data.dart';
 
 main() async {
   HttpServer requestServer =
@@ -27,9 +30,26 @@ void handleMessage(HttpRequest request) {
 }
 
 void handleGet(HttpRequest request) {
-  request.response
-    ..write('get request success...3')
-    ..close();
+  var action = request.uri.queryParameters['action'];
+
+  switch (action) {
+    case 'getProducts':
+      print('获取产品数据...');
+
+      request.response
+        ..statusCode = HttpStatus.ok
+        ..write(jsonEncode(products))
+        ..close();
+      break;
+    case 'getNews':
+      print('获取新闻数据...');
+
+      request.response
+        ..statusCode = HttpStatus.ok
+        ..write(jsonEncode(news))
+        ..close();
+      break;
+  }
 }
 
 void handlePost(HttpRequest request) {
